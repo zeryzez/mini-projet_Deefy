@@ -40,7 +40,9 @@ class AddPodcastTrackAction extends Action{
                                 $track = new PodcastTrack($name, $uploadFilePath);
                                 $_SESSION['playlist']->ajdPiste($track);
                                 $repo = DeefyRepository::getInstance();
+                                $repo->saveTrack($track);
                                 $repo->playlistLinkTrack($_SESSION['playlist'],$track);
+                                $_SESSION['playlist'] = $repo->findPlaylistTracksById($_SESSION['playlistId']);
                                 $playlistRenderer = new AudioListRenderer($_SESSION['playlist']);
                                 $html .= <<<END
                                     <h1>Votre playlist</h1>

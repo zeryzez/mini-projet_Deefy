@@ -15,7 +15,7 @@ class DisplayPlaylistAction extends Action {
         }else{
             $_SESSION['playlist'] = $repo->findPlaylistTracksById($_GET['id']);
             $_SESSION['playlistId']=$_GET['id'];
-            $html .= $_SESSION['playlist']->__toString();
+            $html .= (new AudioListRenderer($_SESSION['playlist']))->render();
             $html .= "<br><a href=?action=add-track> ajouter une piste </a>";
         }
         return $html;
