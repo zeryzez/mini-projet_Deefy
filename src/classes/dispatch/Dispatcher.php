@@ -2,6 +2,7 @@
 namespace iutnc\deefy\dispatch;
 use iutnc\deefy\action\DefaultAction;
 use iutnc\deefy\action\DisplayPlaylistAction;
+use iutnc\deefy\action\DisplayAllPlaylistAction;
 use iutnc\deefy\action\AddPodcastTrackAction;
 use iutnc\deefy\action\AddPlaylistAction;
 use iutnc\deefy\action\AddUserAction;
@@ -17,11 +18,15 @@ class Dispatcher {
     }
 
     public function run(): void{
+        session_start();
         switch($this->action){
             case 'display-playlist':
                 $action = new DisplayPlaylistAction();
                 $html = $this->renderPage($action->execute());
-                echo $html;
+                break;
+            case 'display-all-playlist':
+                $action = new DisplayAllPlaylistAction();
+                $html = $this->renderPage($action->execute());
                 break;
             case 'add-track':
                 $action = new AddPodcastTrackAction();
@@ -47,24 +52,31 @@ class Dispatcher {
         }
     }
 
-    private function renderPage(string $html): void{
+    private function renderPage(string $html): void {
+        $playlistId = isset($_SESSION['playlistId']) ? htmlspecialchars($_SESSION['playlistId'], ENT_QUOTES, 'UTF-8') : '';
+    
         echo <<<END
         <!DOCTYPE html>
         <html>
             <head>
+                <meta charset="UTF-8">
                 <title>Deefy</title>
             </head>
             <body>
                 <nav>
                     <ul>
-                        <li><a href='?action=add-track'> ajouter track</a></li>
-                        <li><a href='?action=add-playlist'> ajouter playlist</a></li>
-                        <li><a href='?action=display-playlist&id=1'> voir playlist</a></li>
-                        <li><a href='?action=add-user'> ajouter user</a></li>
-                        <li><a href='?action=signin'> connexion</a></li>
-                    </ul>
-                        
+                        <li><a href='?action=display-playlist&id={$playlistId}'>voir playlist actuelle</a></li>
+                        <li><a href='?action=add-track'>ajouter track</a></li>
+                        <li><a href='?action=add-playlist'>ajouter playlist</a></li>
+                        <li><a href='?action=display-all-playlist'>voir toute playlist</a></li>
+                        <li><a href='?action=add-user'>s'inscrire</a></li>
+                        <li><a href='?action=signin'>connexion</a></li>
+                    </ul>              
+                </nav>
                 $html
+            </body>
+        </html>
         END;
     }
+    
 }

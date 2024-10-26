@@ -2,10 +2,10 @@
 namespace iutnc\deefy\action;
 
 use iutnc\deefy\auth\AuthnProvider;
+use iutnc\deefy\exception\AuthException;
     class AddUserAction extends Action{
 
         public function execute() : String{
-            session_start();
             $html = " ";
             if($this->http_method === 'GET'){
                 $html .= <<<END
@@ -42,8 +42,8 @@ use iutnc\deefy\auth\AuthnProvider;
                         AuthnProvider::register($email, $mdp);
                         $html .= "Vous êtes maintenant inscrit";
                         $html .= "<a href='?action=signin'>Connectez-vous</a>";
-                    }catch(\AuthException $e){
-                        $html .= "Erreur: veuillez réessayer";
+                    }catch(AuthException $e){
+                        $html .= "Erreur: veuillez réessayer" . $e->getMessage();
                     }
                 }
             }

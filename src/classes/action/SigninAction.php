@@ -6,7 +6,6 @@ use iutnc\deefy\auth\AuthnProvider;
 
 class SigninAction extends Action{
     public function execute() : string{
-        session_start();
         $html = " ";
         if($this->http_method === 'GET'){
             $html .= <<<END
@@ -19,8 +18,8 @@ class SigninAction extends Action{
             </form>
             END;
         }else if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $email = filter_var($_POST['email']);
-            $password = filter_var($_POST['password']);
+            $email = filter_var($_POST['email'],FILTER_SANITIZE_EMAIL);
+            $password = filter_var($_POST['password'],FILTER_SANITIZE_EMAIL);
             try{
                 AuthnProvider::signin($email, $password);
                 $html .= "Vous êtes connecté";

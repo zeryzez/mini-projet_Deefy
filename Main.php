@@ -1,19 +1,4 @@
 <?php
-/*
-require_once 'src/classes/render/Renderer.php';
-require_once 'src/classes/exception/InvalidPropertyNameException.php';
-require_once 'src/classes/exception/InvalidPropertyValueException.php';
-require_once 'src/classes/audio/tracks/AudioTrack.php';
-require_once 'src/classes/audio/tracks/PodcastTrack.php';
-require_once 'src/classes/audio/tracks/AlbumTrack.php';
-require_once 'src/classes/render/AudioTrackRenderer.php';
-require_once 'src/classes/render/PodcastTrackRenderer.php';
-require_once 'src/classes/render/AlbumTrackRenderer.php';
-require_once 'src/classes/audio/lists/AudioList.php';
-require_once 'src/classes/audio/lists/Album.php';
-require_once 'src/classes/audio/lists/Playlist.php';
-require_once 'src/classes/render/AudioListRenderer.php';
-*/
 
 require_once 'vendor/autoload.php';
 

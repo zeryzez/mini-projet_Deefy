@@ -37,6 +37,26 @@ class DeefyRepository{
         return self::$instance;
     }
 
+    public function getPlaylistById($id){
+        $query = "Select * from playlist where id = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id' => $id]);
+        $playlist = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $playlist;
+    }
+
+    public function getPlaylistByName($name){
+        $query = "SELECT * FROM playlist WHERE nom = :name";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['name' => $name]);
+        $playlist = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if (!$playlist) {
+            throw new \Exception("Playlist not found with name: $name");
+        }
+        return $playlist;
+    }
+    
+
     public function getUserFromEmail($email){
         $query = "Select * from user where email = :email";
         $stmt = $this->pdo->prepare($query);
@@ -67,17 +87,22 @@ class DeefyRepository{
         $stmt->execute(['email' => $email, 'passwd' => $hash, 'role' => '1']);
     }
 
-    public function findAllPlaylistById() : array{
-        $query = "Select * from playlist";
-        $stmt=$this->pdo->prepare($query);
-        $stmt->execute();
-        $playlists = [];
-        foreach($stmt->fetchAll(\PDO::FETCH_ASSOC) as $row){
-            $playlists[] = new Playlist($row['nom']);
-
+    public function findAllPlaylistByUser() : array{
+        $query = "Select id_pl from user2playlist where id_user = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id' => $_SESSION['user']->getId()]);
+        $playlists = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $plArray = [];
+        foreach($playlists as $pl){
+            $plArray[] = $this->findPlaylistTracksById($pl['id_pl']);
         }
-        echo "OK";
-        return $playlists;
+        return $plArray;
+    }
+
+    public function userLinkPlaylist($idUser, $idPlaylist){
+        $query = "Insert into user2playlist (id_user, id_pl) values (:idUser, :idPlaylist)";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['idUser' => $idUser, 'idPlaylist' => $idPlaylist]);
     }
 
     public function savePlaylist(Playlist $playlist){
@@ -106,35 +131,64 @@ class DeefyRepository{
         }
     }
 
-    public function playlistLinkTrack(Playlist $playlist, AudioTrack $track){
+    public function playlistLinkTrack(Playlist $playlist, AudioTrack $track) {
         try {
-            $stmtPlaylist = $this->pdo->query("SELECT id FROM playlist WHERE nom = '" . $playlist->__get('nom') . "'");
-            $idPlaylist = $stmtPlaylist->fetch(\PDO::FETCH_ASSOC)['id'];
-            $stmtTrack = $this->pdo->query("SELECT id FROM track WHERE titre = '" . $track->__get('titre') . "'");
-            $idAudioTrack = $stmtTrack->fetch(\PDO::FETCH_ASSOC)['id'];
-            $query = "INSERT INTO playlist2track (id_pl, id_track) VALUES (:id_playlist, :id_track)";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute(['id_playlist' => $idPlaylist, 'id_track' => $idAudioTrack]);
+            // Get the playlist ID
+            $playlistData = $this->getPlaylistByName($playlist->__get('nom'));
+            $playlistId = $playlistData['id'] ?? null;
     
-            echo "OK";
-        } catch (PDOException $e) {
-            echo $e->getMessage();
+            if ($playlistId === null) {
+                throw new \Exception("Playlist not found: " . $playlist->__get('nom'));
+            }
+    
+            // Get the track ID
+            $queryTrack = "SELECT id FROM track WHERE titre = :title";
+            $stmtTrack = $this->pdo->prepare($queryTrack);
+            $stmtTrack->execute(['title' => $track->__get('titre')]);
+            $trackData = $stmtTrack->fetch(\PDO::FETCH_ASSOC);
+            $trackId = $trackData['id'] ?? null;
+    
+            if ($trackId === null) {
+                throw new \Exception("Track not found: " . $track->__get('titre'));
+            }
+    
+            // Insert into playlist2track if both IDs are valid
+            $query = "INSERT INTO playlist2track (id_pl, id_track) VALUES (:id_pl, :id_track)";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['id_pl' => $playlistId, 'id_track' => $trackId]);
+        } catch (\PDOException $e) {
+            echo "Database error: " . $e->getMessage();
+        } catch (\Exception $e) {
+            echo "Error: " . $e->getMessage();
         }
     }
-
-    public function findPlaylistById(int $id): Playlist {
-        $stmtPlaylist = $this->pdo->query("SELECT * FROM playlist WHERE id = " . $id);
-        $playlist = $stmtPlaylist->fetch(\PDO::FETCH_ASSOC);
-        $stmtTracks = $this->pdo->query("SELECT * FROM track JOIN playlist2track ON track.id = playlist2track.id_track WHERE playlist2track.id_pl = " . $id);
+    
+    
+    public function findPlaylistTracksById($id): Playlist {
+        $queryPlaylist = "SELECT * FROM playlist WHERE id = :id";
+        $stmtPlaylist = $this->pdo->prepare($queryPlaylist);
+        $stmtPlaylist->execute(['id' => $id]);
+        $playlistData = $stmtPlaylist->fetch(\PDO::FETCH_ASSOC);
+    
+        if (!$playlistData) {
+            throw new \Exception("Playlist not found for ID: $id");
+        }
+        $queryTracks = "SELECT * FROM track 
+                        JOIN playlist2track ON track.id = playlist2track.id_track 
+                        WHERE playlist2track.id_pl = :id";
+        $stmtTracks = $this->pdo->prepare($queryTracks);
+        $stmtTracks->execute(['id' => $id]);
+    
         $tracks = [];
-        foreach ($stmtTracks->fetchAll(\PDO::FETCH_ASSOC) as $track) {
-            if ($track['type'] == 'P') {
-                $tracks[] = new PodcastTrack($track['titre'], $track['filename']);
+        foreach ($stmtTracks->fetchAll(\PDO::FETCH_ASSOC) as $trackData) {
+            if ($trackData['type'] === 'Podcast') {
+                $tracks[] = new PodcastTrack($trackData['titre'], $trackData['filename'], $trackData['date_posdcast'], $trackData['auteur_podcast']);
             } else {
-                $tracks[] = new AlbumTrack($track['titre'], $track['filename']);
+                $tracks[] = new AlbumTrack($trackData['titre'], $trackData['filename'], $trackData['artiste_album'], $trackData['titre_album'], $trackData['annee_album'], $trackData['numero_album']);
             }
         }
-        return new Playlist($playlist['nom'], $tracks);
+        return new Playlist($playlistData['nom'], $tracks);
     }
+    
     
 }
