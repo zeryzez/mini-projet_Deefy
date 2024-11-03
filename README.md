@@ -53,9 +53,9 @@ En créant un nouvel utilisateur ou en utilisant un déjà existant tels que :
 > [!NOTE]
 >- Un utilisateur lambda sera catégorié par le chiffre 1 tandis que l'administrateur sera catégorié par le chiffre 100
 >- Ajout de la possibilité de se déconnecter pour plusieurs raison : 
-    >- Sécurité
-    >- Gestion des droits d'accès
-    >- Facilité d'utilisation (notamment pour les tests)
+    > - Sécurité
+    > - Gestion des droits d'accès
+    > - Facilité d'utilisation (notamment pour les tests)
 
 ### 🛠️ Compléments proposé 
 
@@ -63,4 +63,4 @@ En créant un nouvel utilisateur ou en utilisant un déjà existant tels que :
 playlist ou au rôle ADMIN
 - [x] Stockage adéquat des mot de passe, parades contre l’injection XSS et SQL
 - [x] Code HTML généré valide
-- [] Utilisation d’un framework css pour la mise en page
+- [ ] Utilisation d’un framework css pour la mise en page
