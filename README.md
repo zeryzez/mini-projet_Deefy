@@ -31,11 +31,11 @@ En créant un nouvel utilisateur ou en utilisant un déjà existant tels que :
 |📜 Afficher Toute les Playlist|Affiche les playlist spécifique à l'utilisateur connecter|
 
 > [!NOTE]
->Chaque utilisateur peut créer une playlist, ajouter des pistes à une playlist, et afficher les playlists qu'il a créées.
->L'administrateur peut afficher toutes les playlists, et les pistes de chaque playlist.
->Les utilisateurs connectés peuvent avoir accès à leurs différentes playlistes et pistes 
->Les utilisateurs non connectés peuvent s'inscrire ou se connecter pour accéder aux fonctionnalités.
->Les mots de passe sont stockés en base de données après chiffrement via password_hash()
+>- Chaque utilisateur peut créer une playlist, ajouter des pistes à une playlist, et afficher les playlists qu'il a créées.
+>- L'administrateur peut afficher toutes les playlists, et les pistes de chaque playlist.
+>- Les utilisateurs connectés peuvent avoir accès à leurs différentes playlistes et pistes 
+>- Les utilisateurs non connectés peuvent s'inscrire ou se connecter pour accéder aux fonctionnalités.
+>- Les mots de passe sont stockés en base de données après chiffrement via password_hash()
 
 
 
@@ -51,8 +51,8 @@ En créant un nouvel utilisateur ou en utilisant un déjà existant tels que :
 |📦 Données Pistes|Stockées dans la table `tracks` de la base de données|
 
 > [!NOTE]
->Un utilisateur lambda sera catégorié par le chiffre 1 tandis que l'administrateur sera catégorié par le chiffre 100
->Ajout de la possibilité de se déconnecter pour plusieurs raison : 
+>-Un utilisateur lambda sera catégorié par le chiffre 1 tandis que l'administrateur sera catégorié par le chiffre 100
+>-Ajout de la possibilité de se déconnecter pour plusieurs raison : 
 - Sécurité
 - Gestion des droits d'accès
 - Facilité d'utilisation (notamment pour les tests)
