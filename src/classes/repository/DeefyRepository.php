@@ -80,6 +80,17 @@ class DeefyRepository{
         return $idUser['id_user'];
     }
 
+    public function getUserRolefromId($id){
+        if($id == null || $id == "" || $id < 0){
+            return -1;
+        }
+        $query = "Select role from user where id = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id' => $id]);
+        $role = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $role['role'];
+    }
+
     public function insertUser($email, $password){
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $query = "Insert into user (email, passwd, role) values (:email, :passwd, :role)";
@@ -88,13 +99,21 @@ class DeefyRepository{
     }
 
     public function findAllPlaylistByUser() : array{
-        $query = "Select id_pl from user2playlist where id_user = :id";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->execute(['id' => $_SESSION['user']->getId()]);
+        if(!isset($_SESSION['user'])){
+            return [];
+        }else if($_SESSION['user']->getRole() == '100'){
+            $query = "Select id from playlist";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute();
+        }else{
+            $query = "Select id_pl as id from user2playlist where id_user = :id";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(['id' => $_SESSION['user']->getId()]);
+        }
         $playlists = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $plArray = [];
         foreach($playlists as $pl){
-            $plArray[] = $this->findPlaylistTracksById($pl['id_pl']);
+            $plArray[] = $this->findPlaylistTracksById($pl['id']);
         }
         return $plArray;
     }

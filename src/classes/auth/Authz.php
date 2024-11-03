@@ -7,7 +7,7 @@ use iutnc\deefy\repository\DeefyRepository;
 class Authz{
     public function checkRole($role): bool{
         if(isset($_SESSION['user'])){
-            if($_SESSION['user']['role'] == $role){
+            if($_SESSION['user'].getRole() == $role){
                 return true;
             }else{
                 return false;
@@ -18,16 +18,19 @@ class Authz{
     }
 
     public function checkPlaylistOwner($id): bool {
-        $userIdActuelle = $_SESSION['user']->getId();
-        if ($userIdActuelle == '100') {
-            return true;
-        }
-        $repo = DeefyRepository::getInstance();
-        $id_user = $repo->getUserIdFromPlaylist($id);
-        if ($id_user=="-1") {
+        if (!isset($_SESSION['user'])) {
             return false;
         }
-        if ($id_user == $userIdActuelle) {
+        $repo = DeefyRepository::getInstance();
+        $userRoleActuelle = $repo->getUserRolefromId($_SESSION['user']->getId());
+        if ($userRoleActuelle == '100') {
+            return true;
+        }
+        $role_user = $repo->getUserRolefromId($repo->getUserIdFromPlaylist($id));
+        if ($role_user=="-1") {
+            return false;
+        }
+        if ($id_user == $userRoleActuelle) {
             return true;
         }
         return false;

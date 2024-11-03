@@ -9,6 +9,13 @@ class AddPlaylistAction extends Action{
         
         public function execute() : string{
             $html = " ";
+            if(!isset($_SESSION['user'])){
+                $html.= <<<END
+                <p> veuillez vous connecter pour ajouter une playlist</p>
+                <a href="?action=signin">Se connecter</a>
+                END;
+                return $html;
+            }
             if($this->http_method === 'GET'){
                 $html .= <<<END
                 <form action="?action=add-playlist" method="POST">
@@ -17,7 +24,7 @@ class AddPlaylistAction extends Action{
                     <input type="submit" value="Submit">
                 </form>
                 END;
-            }else if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            }else if($this->http_method === 'POST'){
                 if(filter_var($_POST['name']) === $_POST['name']){
                     $playlist = new Playlist($_POST['name']);
                     $repo = DeefyRepository::getInstance();

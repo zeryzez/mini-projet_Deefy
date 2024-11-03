@@ -7,6 +7,7 @@ use iutnc\deefy\action\AddPodcastTrackAction;
 use iutnc\deefy\action\AddPlaylistAction;
 use iutnc\deefy\action\AddUserAction;
 use iutnc\deefy\action\SigninAction;
+use iutnc\deefy\action\SignoutAction;
 
 
 class Dispatcher {
@@ -44,6 +45,10 @@ class Dispatcher {
                 $action = new SigninAction();
                 $this->renderPage($action->execute());
                 break;
+            case 'signout':
+                $action = new SignoutAction();
+                $this->renderPage($action->execute());
+                break;
             default:
                 $action = new DefaultAction();
                 $this->renderPage($action->execute());
@@ -71,6 +76,7 @@ class Dispatcher {
                         <li><a href='?action=display-all-playlist'>voir toute playlist</a></li>
                         <li><a href='?action=add-user'>s'inscrire</a></li>
                         <li><a href='?action=signin'>connexion</a></li>
+                        <li><a href='?action=signout'>déconnexion</a></li>
                     </ul>              
                 </nav>
                 $html

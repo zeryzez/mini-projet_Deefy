@@ -25,7 +25,7 @@ use iutnc\deefy\exception\AuthException;
                     <input type="submit" value="Inscription">
                 </form>
                 END;
-            }else if($_SERVER['REQUEST_METHOD']==='POST'){
+            }else if($this -> http_method==='POST'){
                 $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
                 $cemail = filter_var($_POST['cemail'], FILTER_SANITIZE_EMAIL);
                 $mdp = filter_var($_POST['mdp'], FILTER_SANITIZE_STRING);

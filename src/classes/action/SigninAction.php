@@ -17,7 +17,7 @@ class SigninAction extends Action{
                 <input type="submit" value="Submit">
             </form>
             END;
-        }else if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        }else if($this -> http_method === 'POST'){
             $email = filter_var($_POST['email'],FILTER_SANITIZE_EMAIL);
             $password = filter_var($_POST['password'],FILTER_SANITIZE_EMAIL);
             try{

@@ -24,7 +24,7 @@ class AddPodcastTrackAction extends Action{
                     </form>
                     END;
     
-                } else if($_SERVER['REQUEST_METHOD'] === 'POST') { 
+                } else if($this -> http_method === 'POST') { 
                         $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
                         if(isset($_FILES['audioFile'])) {
                             $file = $_FILES['audioFile'];
