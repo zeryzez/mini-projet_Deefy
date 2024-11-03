@@ -51,11 +51,11 @@ En créant un nouvel utilisateur ou en utilisant un déjà existant tels que :
 |📦 Données Pistes|Stockées dans la table `tracks` de la base de données|
 
 > [!NOTE]
->-Un utilisateur lambda sera catégorié par le chiffre 1 tandis que l'administrateur sera catégorié par le chiffre 100
->-Ajout de la possibilité de se déconnecter pour plusieurs raison : 
-- Sécurité
-- Gestion des droits d'accès
-- Facilité d'utilisation (notamment pour les tests)
+>- Un utilisateur lambda sera catégorié par le chiffre 1 tandis que l'administrateur sera catégorié par le chiffre 100
+>- Ajout de la possibilité de se déconnecter pour plusieurs raison : 
+    >- Sécurité
+    >- Gestion des droits d'accès
+    >- Facilité d'utilisation (notamment pour les tests)
 
 ### 🛠️ Compléments proposé 
 
