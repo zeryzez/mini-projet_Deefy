@@ -1,5 +1,5 @@
 <?php
-namespace iutnc\deefy\tools;
+namespace iutnc\deefy\auth;
 
 class User{
     private string $id;

@@ -13,6 +13,8 @@ class AddPodcastTrackAction extends Action{
             if(isset($_SESSION['playlist'])){
                 if($this->http_method === 'GET'){
                     $html .= <<<END
+                    <h1>Ajouter une piste </h1>
+                    <h2>Playlist : {$_SESSION['playlist']->__get('nom')}</h2>
                     <form action="?action=add-track" method="POST" enctype="multipart/form-data">
                         <label for="name">Nom:</label>
                         <input type="text" id="name" name="name" required>

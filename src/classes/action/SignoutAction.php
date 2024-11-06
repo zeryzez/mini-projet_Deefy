@@ -5,6 +5,6 @@ namespace iutnc\deefy\action;
 class SignoutAction extends Action {
     public function execute() : string {
         session_destroy();
-        return "<p>Vous êtes déconnecté</p>";
+        return "<h2>Vous êtes déconnecté</h2>";
     }
 }

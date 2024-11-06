@@ -30,7 +30,7 @@ class Authz{
         if ($role_user=="-1") {
             return false;
         }
-        if ($id_user == $userRoleActuelle) {
+        if ($role_user == $userRoleActuelle) {
             return true;
         }
         return false;

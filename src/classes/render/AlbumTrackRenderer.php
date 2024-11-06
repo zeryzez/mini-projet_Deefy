@@ -19,8 +19,6 @@ class AlbumTrackRenderer extends AudioTrackRenderer{
 
     protected function renderCompact(): String{
         return "Titre: ".$this->at->titre . "<br>" . "Artiste: "
-        .$this->at->artiste . "<br>" . "Album: ".$this->at->album . "<br>" . 
-        "Durée: ".$this->at->duree . "<br>" .
-         "<audio controls src=\'".$this->at->nomFichierAudio."'></audio><br>" ;
+        .$this->at->artiste . "<br><audio controls src=\'".$this->at->nomFichierAudio."'></audio><br>" ;
     }
 }

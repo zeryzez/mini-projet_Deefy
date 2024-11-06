@@ -6,7 +6,7 @@ use iutnc\deefy\audio\lists\Playlist;
 use iutnc\deefy\audio\tracks\AudioTrack;
 use iutnc\deefy\audio\tracks\PodcastTrack;
 use iutnc\deefy\audio\tracks\AlbumTrack;
-use iutnc\deefy\tools\User;
+use iutnc\deefy\auth\User;
 
 
 class DeefyRepository{

@@ -30,9 +30,11 @@ class AddPlaylistAction extends Action{
                     $repo = DeefyRepository::getInstance();
                     $repo->savePlaylist($playlist);
                     $_SESSION['playlist'] = $playlist;
-                    $repo->userLinkPlaylist($_SESSION['user']->getId(), $repo->getIdPlaylist($playlist->__get("nom")));
+                    $repo->userLinkPlaylist($_SESSION['user']->getId(), $repo->getPlaylistByName($playlist->__get('nom'))['id']);
                     $render = new AudioListRenderer($playlist);
                     $html .= $render->render($playlist) . '<br>';
+                    $_SESSION['playlist'] = $playlist;
+                    $_SESSION['playlistId'] = $repo->getPlaylistByName($playlist->__get('nom'))['id'];
                     $html .= '<a href="?action=add-track">Ajouter une piste</a>';
                 }else{
                     $html .= 'Le nom de la playlist ne doit pas contenir de caractères spéciaux';

@@ -2,7 +2,6 @@
 namespace iutnc\deefy\action;
 
 use iutnc\deefy\repository\DeefyRepository;
-use iutnc\deefy\render\AudioListRenderer;
 use iutnc\deefy\auth\Authz;
 
 class DisplayAllPlaylistAction extends Action {
@@ -22,8 +21,7 @@ class DisplayAllPlaylistAction extends Action {
                 if ($playlistId) {
                     if((new Authz())->checkPlaylistOwner($playlistId)) {
                         $html .= <<<END
-                        <h1>{$playlist->__get("nom")}</h1>
-                        <a href='?action=display-playlist&id=$playlistId'>{$playlist->__toString()}</a><br><br>
+                        <a href='?action=display-playlist&id=$playlistId'><p>{$playlist->__get("nom")}</p></a>
                         END;
                     }
                 }

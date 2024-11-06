@@ -62,24 +62,37 @@ class Dispatcher {
     
         echo <<<END
         <!DOCTYPE html>
-        <html>
+        <html lang="FR">
             <head>
                 <meta charset="UTF-8">
                 <title>Deefy</title>
+                <link rel="stylesheet" href="src/style/style.css">
             </head>
             <body>
                 <nav>
                     <ul>
-                        <li><a href='?action=display-playlist&id={$playlistId}'>voir playlist actuelle</a></li>
-                        <li><a href='?action=add-track'>ajouter track</a></li>
-                        <li><a href='?action=add-playlist'>ajouter playlist</a></li>
-                        <li><a href='?action=display-all-playlist'>voir toute playlist</a></li>
-                        <li><a href='?action=add-user'>s'inscrire</a></li>
-                        <li><a href='?action=signin'>connexion</a></li>
-                        <li><a href='?action=signout'>déconnexion</a></li>
+                        <div>
+                            <li><a href='?action=display-playlist&id={$playlistId}'>voir playlist actuelle</a></li>
+                            <li><a href='?action=add-track'>ajouter track</a></li>
+                            <li><a href='?action=add-playlist'>ajouter playlist</a></li>
+                            <li><a href='?action=display-all-playlist'>voir toute playlist</a></li>
+                        </div>
+                        <div>
+                            <li><a href='?action=default'>accueil</a></li>
+                        </div>
+                        <div>
+                            <li><a href='?action=add-user'>s'inscrire</a></li>
+                            <li><a href='?action=signin'>connexion</a></li>
+                            <li><a href='?action=signout'>déconnexion</a></li>
+                        </div>
                     </ul>              
                 </nav>
-                $html
+                <main>
+                    $html
+                </main>
+                <footer>
+                    <p>Mini_Projet_Deefy - 2024 @CopyRight Mathys Blonbou </p>
+                </footer>
             </body>
         </html>
         END;
